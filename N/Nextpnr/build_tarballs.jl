@@ -15,7 +15,7 @@ dependencies = [
     Dependency("Prjtrellis_jll"; compat="0.1.0"),
     Dependency("boost_jll"; compat="=1.76.0"), # max gcc7
     #Dependency("Python_jll"; compat="3.8.1"), # used for prjtrellis
-    HostBuildDependency("Python_jll"),
+    #HostBuildDependency("Python_jll"),
     Dependency("Eigen_jll"; compat="3.3.9")
 ]
 
@@ -27,7 +27,9 @@ export PYTHONPATH=${prefix}/lib/python3.8
 cmake -DARCH="ice40;ecp5" \
     -DCMAKE_INSTALL_PREFIX=${prefix} \
     -DICESTORM_INSTALL_PREFIX=${prefix} \
-    -DPYTHON_EXECUTABLE=${prefix}/bin/python3 \
+    -DPYTHON_EXECUTABLE=/usr/bin/python3 \
+    -DPYTHON_LIBRARY=/usr/lib/libpython3.so \
+    -DPYTHON_INCLUDE_DIR=/usr/lib/python3.8/ \
     -DTRELLIS_INSTALL_PREFIX=${prefix} \
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TARGET_TOOLCHAIN} \
     -DCMAKE_BUILD_TYPE=Release .
