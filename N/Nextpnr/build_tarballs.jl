@@ -12,8 +12,9 @@ sources = [
 
 dependencies = [
     Dependency("Icestorm_jll"; compat="0.1.0"),
-    Dependency("Prjtrellis_jll"; compat="0.1.0"),
+    Dependency("Prjtrellis_jll"; compat="0.1.0"), #TODO
     Dependency("boost_jll"; compat="=1.76.0"), # max gcc7
+    Dependency("Python_jll"),
     Dependency("Eigen_jll"; compat="3.3.9")
 ]
 
@@ -31,7 +32,7 @@ cmake -DARCH="ice40" \
     -DICESTORM_INSTALL_PREFIX=${prefix} \
     -DBBA_IMPORT=./bba/bba-export.cmake \
     -DPYTHON_EXECUTABLE=/usr/bin/python3 \
-    -DPYTHON_LIBRARY=/usr/lib/libpython3.so \
+    -DPYTHON_LIBRARY=${prefix}/lib/libpython3.so \
     -DPYTHON_INCLUDE_DIR=/usr/lib/python3.8/ \
     -DTRELLIS_INSTALL_PREFIX=${prefix} \
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TARGET_TOOLCHAIN} \
