@@ -7,15 +7,13 @@ version = v"0.1.0"
 
 # Collection of sources required to complete build
 sources = [
-    GitSource("/home/steve/Software/nextpnr", "53918a9766a1bff7e1fecac37822e31051888b35")
+    GitSource("https://github.com/YosysHQ/nextpnr.git", "dd6376433154e008045695f5420469670b0c3a88")
 ]
 
 dependencies = [
     Dependency("Icestorm_jll"; compat="0.1.0"),
     Dependency("Prjtrellis_jll"; compat="0.1.0"),
     Dependency("boost_jll"; compat="=1.76.0"), # max gcc7
-    #Dependency("Python_jll"; compat="3.8.1"), # used for prjtrellis
-    #HostBuildDependency("Python_jll"),
     Dependency("Eigen_jll"; compat="3.3.9")
 ]
 
@@ -23,10 +21,15 @@ dependencies = [
 script = raw"""
 cd nextpnr
 git submodule --init && git submodule --update
+cd bba 
+cmake .
+make
+cd ..
 export PYTHONPATH=${prefix}/lib/python3.8
-cmake -DARCH="ice40;ecp5" \
+cmake -DARCH="ice40" \
     -DCMAKE_INSTALL_PREFIX=${prefix} \
     -DICESTORM_INSTALL_PREFIX=${prefix} \
+    -DBBA_IMPORT=./bba/bba-export.cmake \
     -DPYTHON_EXECUTABLE=/usr/bin/python3 \
     -DPYTHON_LIBRARY=/usr/lib/libpython3.so \
     -DPYTHON_INCLUDE_DIR=/usr/lib/python3.8/ \
