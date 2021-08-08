@@ -31,9 +31,6 @@ cmake -DARCH="ice40" \
     -DCMAKE_INSTALL_PREFIX=${prefix} \
     -DICESTORM_INSTALL_PREFIX=${prefix} \
     -DBBA_IMPORT=./bba/bba-export.cmake \
-    -DPYTHON_EXECUTABLE=/usr/bin/python3 \
-    -DPYTHON_LIBRARY=${prefix}/lib/libpython3.so \
-    -DPYTHON_INCLUDE_DIR=/usr/lib/python3.8/ \
     -DTRELLIS_INSTALL_PREFIX=${prefix} \
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TARGET_TOOLCHAIN} \
     -DCMAKE_BUILD_TYPE=Release .
@@ -43,7 +40,7 @@ make install
 
 # These are the platforms we will build for by default, unless further
 # platforms are passed in on the command line
-platforms = filter!(p -> Sys.islinux(p) && arch(p) == "x86_64", supported_platforms(;experimental=true))
+platforms = HostPlatform() #filter!(p -> Sys.islinux(p) && arch(p) == "x86_64", supported_platforms(;experimental=true))
 platforms = expand_cxxstring_abis(platforms)
 # For some reason, building for CXX03 string ABI doesn't actually work, skip it
 filter!(x -> cxxstring_abi(x) != "cxx03", platforms)
