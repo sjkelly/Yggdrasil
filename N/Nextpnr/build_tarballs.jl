@@ -14,28 +14,32 @@ dependencies = [
     Dependency("Icestorm_jll"; compat="0.1.0"),
     Dependency("Prjtrellis_jll"; compat="0.1.0"), #TODO
     Dependency("boost_jll"; compat="=1.76.0"), # max gcc7
-    Dependency("Python_jll"),
+    HostBuildDependency("Python_jll"),
     Dependency("Eigen_jll"; compat="3.3.9")
 ]
 
 # Bash recipe for building across all platforms
 script = raw"""
 cd nextpnr
+rm -f $(which python3)
+rm -f /etc/profile.d/0_bb_utils.sh
 git submodule --init && git submodule --update
+export PYTHONPATH=${prefix}/lib/python3.8:${prefix}/lib/trellis
 cd bba 
 cmake .
 make
 cd ..
-export PYTHONPATH=${prefix}/lib/python3.8
-cmake -DARCH="ice40" \
+cmake . -DARCH="ecp5" \
     -DCMAKE_INSTALL_PREFIX=${prefix} \
     -DICESTORM_INSTALL_PREFIX=${prefix} \
     -DBBA_IMPORT=./bba/bba-export.cmake \
-    -DTRELLIS_INSTALL_PREFIX=${prefix} \
+#    -DPYTHON_EXECUTABLE=${prefix}/bin/python3 \
+#    -DPYTHON_LIBRARY=${prefix}/lib/libpython3.so \
+#    -DPYTHON_INCLUDE_DIR=${prefix}/lib/python3.8/ \
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TARGET_TOOLCHAIN} \
-    -DCMAKE_BUILD_TYPE=Release .
+    #-DCMAKE_BUILD_TYPE=Release
 make -j${nproc}
-make install
+#make install
 """
 
 # These are the platforms we will build for by default, unless further
