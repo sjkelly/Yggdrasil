@@ -18,7 +18,8 @@ message(STATUS "Found Yosys at ${LIBYOSYS}")
 
 add_library(yosyswrapper SHARED yosyswrapper.cpp)
 
-target_include_directories(yosyswrapper PUBLIC share/yosys/include)
+target_include_directories(yosyswrapper PUBLIC ${CMAKE_INSTALL_PREFIX}/share/yosys/include)
+
 target_link_libraries(yosyswrapper
   JlCxx::cxxwrap_julia
   ${LIBYOSYS}
