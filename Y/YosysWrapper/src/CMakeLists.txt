@@ -25,8 +25,11 @@ target_link_libraries(yosyswrapper
   ${LIBYOSYS}
 )
 
+add_definitions(-D_YOSYS_)
+
 install(TARGETS
   yosyswrapper
 LIBRARY DESTINATION lib
 ARCHIVE DESTINATION lib
-RUNTIME DESTINATION lib)
+RUNTIME DESTINATION lib
+PERMISSIONS WORLD_EXECUTE)

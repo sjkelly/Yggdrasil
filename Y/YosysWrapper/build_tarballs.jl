@@ -30,10 +30,8 @@ cmake \
     -DCMAKE_FIND_ROOT_PATH=${prefix} \
     -DJulia_PREFIX=${prefix} \
     -DCMAKE_BUILD_TYPE=Release \
-    --trace-source=CMakeLists.txt \
     ..
 cmake --build . --config Release --target install -- -j${nproc}
-
 """
 
 include("../../L/libjulia/common.jl")
@@ -43,7 +41,7 @@ platforms = expand_cxxstring_abis(platforms)
 
 # The products that we will ensure are always built
 products = [
-    LibraryProduct("libyosyswrapped", :libyosyswrapped),
+    LibraryProduct("libyosyswrapper", :libyosyswrapper),
 ]
 
 
