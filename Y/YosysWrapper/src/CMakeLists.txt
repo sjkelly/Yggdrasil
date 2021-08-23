@@ -5,13 +5,10 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 
-include_directories(${INTERFACE_INCLUDE_DIRECTORIES})
-
 find_package(JlCxx)
 get_target_property(JlCxx_location JlCxx::cxxwrap_julia LOCATION)
 get_filename_component(JlCxx_location ${JlCxx_location} DIRECTORY)
-set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib;${JlCxx_location};${CMAKE_INSTALL_PREFIX}/lib/yosys")
-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib;${JlCxx_location}")
 
 message(STATUS "Found JlCxx at ${JlCxx_location}")
 
@@ -31,8 +28,19 @@ target_link_libraries(yosyswrapper
 # Note: it is important these defines match the ones in the Makefile of Yosys_jll
 add_definitions(-D_YOSYS_)
 add_definitions(-DYOSYS_ENABLE_TCL)
+add_definitions(-DYOSYS_ENABLE_ABC)
+add_definitions(-DYOSYS_ENABLE_GLOB)
 add_definitions(-DYOSYS_ENABLE_PLUGINS)
 add_definitions(-DYOSYS_ENABLE_READLINE)
+#add_definitions(-DYOSYS_ENABLE_EDITLINE := 0
+#add_definitions(-DYOSYS_ENABLE_GHDL := 0
+#add_definitions(-DYOSYS_ENABLE_VERIFIC := 0
+#add_definitions(-DYOSYS_DISABLE_VERIFIC_EXTENSIONS := 0
+add_definitions(-DYOSYS_ENABLE_COVER)
+#add_definitions(-DYOSYS_ENABLE_LIBYOSYS := 0
+#add_definitions(-DYOSYS_ENABLE_PROTOBUF := 0
+add_definitions(-DYOSYS_ENABLE_ZLIB)
+
 
 
 install(TARGETS

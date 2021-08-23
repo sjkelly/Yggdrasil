@@ -32,6 +32,7 @@ cmake \
     -DCMAKE_BUILD_TYPE=Release \
     ..
 cmake --build . --config Release --target install -- -j${nproc}
+install_license /usr/share/licenses/MIT
 """
 
 include("../../L/libjulia/common.jl")
