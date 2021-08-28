@@ -14,7 +14,7 @@ dependencies = [
     Dependency("Icestorm_jll"; compat="0.1.0"),
     Dependency("Prjtrellis_jll"; compat="0.1.0"), #TODO
     Dependency("boost_jll"; compat="=1.76.0"), # max gcc7
-    #HostBuildDependency("Python_jll"),
+    Dependency("Python_jll"; compat="~3.8.1"),
     Dependency("Eigen_jll"; compat="3.3.9")
 ]
 
@@ -23,7 +23,7 @@ script = raw"""
 cd nextpnr
 git submodule --init && git submodule --update
 
-#export PYTHONPATH=${prefix}/lib/python3.8:${prefix}/lib/trellis
+export PYTHONPATH=${prefix}/lib/python3.8
 
 cd bba 
 cmake . -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TARGET_TOOLCHAIN}
@@ -34,9 +34,10 @@ cmake . -DARCH="ecp5" \
     -DCMAKE_INSTALL_PREFIX=${prefix} \
     -DICESTORM_INSTALL_PREFIX=${prefix} \
     -DTRELLIS_INSTALL_PREFIX=${prefix} \
+    -DTRELLIS_LIBDIR=${prefix}/lib/trellis \
     -DBBA_IMPORT=./bba/bba-export.cmake \
     -DBUILD_PYTHON=OFF \
-    -DPYTHON_EXECUTABLE=/usr/bin/python3 \
+    -DPYTHON_EXECUTABLE=${bindir}/python3 \
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TARGET_TOOLCHAIN} \
     -DCMAKE_BUILD_TYPE=Release \
     .
