@@ -8,6 +8,7 @@ version = v"0.1.0"
 # Collection of sources required to complete build
 sources = [
     GitSource("https://github.com/YosysHQ/nextpnr.git", "dd6376433154e008045695f5420469670b0c3a88")
+    #GitSource("https://github.com/YosysHQ/prjtrellis-db.git")
 ]
 
 dependencies = [
@@ -21,10 +22,10 @@ dependencies = [
 # Bash recipe for building across all platforms
 script = raw"""
 cd nextpnr
-rm -f $(which python3)
-rm -f /etc/profile.d/0_bb_utils.sh
-git submodule --init && git submodule --update
-export PYTHONPATH=${prefix}/lib/python3.8:${prefix}/lib/trellis
+#rm -f $(which python3)
+#rm -f /etc/profile.d/0_bb_utils.sh
+#git submodule --init && git submodule --update
+#export PYTHONPATH=${prefix}/lib/python3.8:${prefix}/lib/trellis
 cd bba 
 cmake .
 make
@@ -32,14 +33,15 @@ cd ..
 cmake . -DARCH="ecp5" \
     -DCMAKE_INSTALL_PREFIX=${prefix} \
     -DICESTORM_INSTALL_PREFIX=${prefix} \
+    -DTRELLIS_INSTALL_PREFIX=${prefix} \
     -DBBA_IMPORT=./bba/bba-export.cmake \
-#    -DPYTHON_EXECUTABLE=${prefix}/bin/python3 \
-#    -DPYTHON_LIBRARY=${prefix}/lib/libpython3.so \
-#    -DPYTHON_INCLUDE_DIR=${prefix}/lib/python3.8/ \
+    -DBUILD_PYTHON=OFF \
+    -DEXTERNAL_CHIPDB=ON \
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TARGET_TOOLCHAIN} \
-    #-DCMAKE_BUILD_TYPE=Release
+    -DCMAKE_BUILD_TYPE=Release \
+    .
 make -j${nproc}
-#make install
+make install
 """
 
 # These are the platforms we will build for by default, unless further
