@@ -7,7 +7,8 @@ version = v"4.1.0"
 
 # Collection of sources required to complete build
 sources = [
-    GitSource("https://github.com/EttusResearch/uhd.git", "f633b497ff931c3c180d00148fc66e4feb8b8b6a")
+    # In-tree patches, see juliatelecom/patch-v4.1.0.1
+    GitSource("https://github.com/JuliaTelecom/uhd.git", "dc1bd24d564e54162a521dfb92093d778eb7293d")
 ]
 
 dependencies = [
@@ -36,7 +37,9 @@ make install
 
 # These are the platforms we will build for by default, unless further
 # platforms are passed in on the command line
-platforms = supported_platforms()
+# TODO: https://github.com/EttusResearch/uhd/blob/919043f305efdd29fbdf586e9cde95d9507150e8/host/cmake/Modules/UHDBoost.cmake#L97-L104
+# Windows boost thread issue.
+platforms = filter!(p->arch(p)!="arm7l", supported_platforms(;experimental=true))
 platforms = expand_cxxstring_abis(platforms)
 # For some reasons, building for CXX03 string ABI doesn't actually work, skip it
 filter!(x -> cxxstring_abi(x) != "cxx03", platforms)
