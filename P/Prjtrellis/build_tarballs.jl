@@ -22,6 +22,10 @@ mkdir build && cd build
 cmake -DCMAKE_INSTALL_PREFIX=${prefix} \
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TARGET_TOOLCHAIN} \
     -DCMAKE_BUILD_TYPE=Release \
+    -DPYTHON_INCLUDE_DIRS=${prefix}/include/python3.8 \
+    -DBoost_INCLUDE_DIRS=${prefix}/include/boost \
+    -DPYTHON_LIBRARIES=${prefix}/lib/python3.8 \
+    -DBoost_LIBRARIES=${prefix}/lib/ \
     ..
 make -j${nproc}
 make install
@@ -29,7 +33,7 @@ make install
 
 # These are the platforms we will build for by default, unless further
 # platforms are passed in on the command line
-platforms = filter!(p -> Sys.islinux(p), supported_platforms())
+platforms = HostPlatform() #filter!(p -> Sys.islinux(p), supported_platforms())
 platforms = expand_cxxstring_abis(platforms)
 # For some reason, building for CXX03 string ABI doesn't actually work, skip it
 filter!(x -> cxxstring_abi(x) != "cxx03", platforms)
