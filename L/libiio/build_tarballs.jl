@@ -35,28 +35,14 @@ else
 fi
 """
 
-include("../../fancy_toys.jl")
-
 # These are the platforms we will build for by default, unless further
 # platforms are passed in on the command line
-#platforms = [HostPlatform()]
-platforms = filter!(p -> !Sys.isapple(p), supported_platforms(;experimental=true))
-platforms_macos = filter!(p -> Sys.isapple(p), supported_platforms(;experimental=true))
+platforms = supported_platforms(;experimental=true)
 
 # The products that we will ensure are always built
-products = [
-    LibraryProduct("libiio", :libiio)
-]
-
-products_apple = [
-    FrameworkProduct("iio", :iio)
-]
-
-non_reg_ARGS = filter(arg -> arg != "--register", ARGS)
+# TODO: Apple generates a Framework, but other platforms a Library
+# so we just ignore for now
+products = Product[]
 
 # Build the tarballs, and possibly a `build.jl` as well.
-if any(should_build_platform.(triplet.(platforms_macos)))
-    build_tarballs(non_reg_ARGS, name, version, sources, script, platforms_macos, products_apple, dependencies; julia_compat="1.6")
-else
-    build_tarballs(ARGS, name, version, sources, script, platforms, products, dependencies; julia_compat="1.6")
-end
+build_tarballs(ARGS, name, version, sources, script, platforms, products, dependencies; julia_compat="1.6")
