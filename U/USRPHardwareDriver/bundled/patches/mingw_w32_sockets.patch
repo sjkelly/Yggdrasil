@@ -1,0 +1,16 @@
+diff --git a/host/CMakeLists.txt b/host/CMakeLists.txt
+index fc91ef441..38f8d9156 100644
+--- a/host/CMakeLists.txt
++++ b/host/CMakeLists.txt
+@@ -266,9 +266,9 @@ if(MSVC)
+     add_compile_options(/MP /bigobj)
+ endif(MSVC)
+ 
+-if(CYGWIN)
++if(CYGWIN OR MINGW)
+     add_definitions(-D__USE_W32_SOCKETS) #boost asio says we need this
+-endif(CYGWIN)
++endif(CYGWIN OR MINGW)
+ 
+ if(WIN32)
+     add_definitions(-D_WIN32_WINNT=0x0501) #minimum version required is windows xp

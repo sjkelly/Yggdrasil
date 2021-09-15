@@ -7,7 +7,8 @@ version = v"4.1.0"
 
 # Collection of sources required to complete build
 sources = [
-    GitSource("https://github.com/EttusResearch/uhd.git", "f633b497ff931c3c180d00148fc66e4feb8b8b6a")
+    GitSource("https://github.com/EttusResearch/uhd.git", "f633b497ff931c3c180d00148fc66e4feb8b8b6a"),
+    DirectorySource("./bundled")
 ]
 
 dependencies = [
@@ -17,10 +18,16 @@ dependencies = [
 
 # Bash recipe for building across all platforms
 script = raw"""
-cd uhd/host
+cd uhd
 
 #code generators, only needed at build time
 apk add py3-mako py3-ruamel.yaml
+
+for f in ${WORKSPACE}/srcdir/patches/*.patch; do
+    atomic_patch -p1 ${f}
+done
+
+cd host # only build host software
 
 mkdir build && cd build
 cmake -DCMAKE_INSTALL_PREFIX=${prefix} \
@@ -30,7 +37,7 @@ cmake -DCMAKE_INSTALL_PREFIX=${prefix} \
     -DENABLE_TESTS=OFF \
     -DENABLE_PYTHON_API=OFF \
     ..
-make -j${nproc}
+make #-j${nproc}
 make install
 """
 
@@ -38,7 +45,7 @@ make install
 # platforms are passed in on the command line
 # TODO: Windows has several issues with boost threads. There is a WIP branch:
 # https://github.com/JuliaTelecom/uhd/tree/juliatelecom/patch-v4.1.0.1
-platforms = expand_cxxstring_abis(filter!(p -> !Sys.iswindows(p) && !in(arch(p),("armv7l","armv6l")), supported_platforms(;experimental=true)))
+platforms = expand_cxxstring_abis(filter!(p -> !in(arch(p),("armv7l","armv6l")), supported_platforms(;experimental=true)))
 
 # The products that we will ensure are always built
 products = Product[
