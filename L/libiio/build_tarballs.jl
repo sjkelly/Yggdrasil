@@ -26,9 +26,12 @@ cmake -DCMAKE_INSTALL_PREFIX=${prefix} \
     -DCMAKE_BUILD_TYPE=Release \
     -DHAVE_DNS_SD=OFF \
     -DENABLE_IPV6=OFF \
+    -DUDEV_RULES_INSTALL_DIR=${libdir}/udev/rules.d \
     ..
 make -j${nproc}
 if [[ "${target}" == *-apple-* ]]; then
+    cp iio.framework/iio libiio.dylib        
+    cp  libiio.dylib ${libdir}               
     cp -r iio.framework ${libdir}
 else
     make install
@@ -39,7 +42,7 @@ fi
 # platforms are passed in on the command line
 # TODO: Apple generates a Framework, but other platforms a Library
 # so we just ignore for now
-platforms = filter!(p -> !Sys.isapple(p), supported_platforms(;experimental=true))
+platforms = supported_platforms(;experimental=true)
 
 # The products that we will ensure are always built
 products = [
