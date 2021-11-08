@@ -11,12 +11,13 @@ sources = [
 ]
 
 dependencies = [
+    Dependency("Zlib_jll"),
 ]
 
 # Bash recipe for building across all platforms
 script = raw"""
 cd pciutils
-make
+make install PREFIX=${prefix} SHARED=yes ZLIB=yes SBINDIR=${prefix}/bin
 """
 
 # These are the platforms we will build for by default, unless further
@@ -25,8 +26,12 @@ platforms = supported_platforms(;experimental=true)
 
 # The products that we will ensure are always built
 products = Product[
+    ExecutableProduct("lspci", :lspci),
+    ExecutableProduct("setpci", :setpci),
+    ExecutableProduct("update-pciids", Symbol("update-pciids")),
+    LibraryProduct("libpci", :libpci)
 ]
 
 # Build the tarballs, and possibly a `build.jl` as well.
 # gcc7 constraint from boost
-build_tarballs(ARGS, name, version, sources, script, platforms, products, dependencies; julia_compat="1.6", preferred_gcc_version=v"7")
+build_tarballs(ARGS, name, version, sources, script, platforms, products, dependencies; julia_compat="1.6")
