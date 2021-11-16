@@ -8,7 +8,8 @@ version = v"0.1.2"
 # Collection of sources required to complete build
 sources = [
     GitSource("https://github.com/xtrx-sdr/libxtrxdsp", "eec28640c0ebd5639b642f07b310a0a0d02d9834"),
-    GitSource("https://github.com/xtrx-sdr/libxtrxll", "1b6eddfbedc700efb6f7e3c3594e43ac6ff29ea4"),
+    #GitSource("https://github.com/xtrx-sdr/libxtrxll", "1b6eddfbedc700efb6f7e3c3594e43ac6ff29ea4"),
+    DirectorySource("/home/sjkelly/libxtrxll", target="libxtrxll"),
     #GitSource("/home/sjkelly/libxtrx", "16b71e00f9214324a41aa9075e53e3a156a7190f"),
     DirectorySource("/home/sjkelly/libxtrx", target="libxtrx"),
     #GitSource("https://github.com/JuliaComputing/libxtrx", "cfad7af43e8beba702356cea9ee861a30fb54673"),
