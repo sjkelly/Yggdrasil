@@ -16,6 +16,9 @@ sources = [
 script = raw"""
 cd $WORKSPACE/srcdir/boost*/
 
+rm $(which python)
+#apk del python
+
 ./bootstrap.sh --prefix=$prefix --with-python=$bindir/python --with-toolset="--cxx=${CXX_FOR_BUILD}"
 
 # Patch adapted from
