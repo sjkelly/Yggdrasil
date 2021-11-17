@@ -16,7 +16,7 @@ sources = [
 script = raw"""
 cd $WORKSPACE/srcdir/boost*/
 
-./bootstrap.sh --prefix=$prefix --without-libraries=python --with-toolset="--cxx=${CXX_FOR_BUILD}"
+./bootstrap.sh --prefix=$prefix --with-python=$bindir/python --with-toolset="--cxx=${CXX_FOR_BUILD}"
 
 # Patch adapted from
 # https://svnweb.freebsd.org/ports/head/devel/boost-libs/files/patch-boost_math_tools_config.hpp?revision=439932&view=markup
@@ -57,7 +57,7 @@ elif [[ $target == *freebsd* ]]; then
     extraargs="address-model=64 link=shared"
     echo "using clang : 6.0 : $CXX : <linkflags>\\"$LDFLAGS\\" ;" > project-config.jam
 fi
-./b2 -j${nproc} toolset=$toolset target-os=$targetos $extraargs variant=release --prefix=$prefix --without-python --layout=system install
+./b2 -j${nproc} toolset=$toolset target-os=$targetos $extraargs variant=release --prefix=$prefix --layout=system install
 
 install_license LICENSE_1_0.txt
 """
@@ -100,6 +100,7 @@ products = [
 
 # Dependencies that must be installed before this package can be built
 dependencies = Dependency[
+    Dependency("Python_jll"; compat="~3.8.1"),
 ]
 
 # Build the tarballs, and possibly a `build.jl` as well.
