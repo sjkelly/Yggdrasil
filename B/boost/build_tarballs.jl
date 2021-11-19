@@ -16,10 +16,11 @@ sources = [
 script = raw"""
 cd $WORKSPACE/srcdir/boost*/
 
-rm $(which python)
+rm -f $(which python)
+rm -f $(which python3)
 #apk del python
 
-./bootstrap.sh --prefix=$prefix --with-python=$bindir/python --with-toolset="--cxx=${CXX_FOR_BUILD}"
+./bootstrap.sh --prefix="${prefix}" --with-python="${bindir}/python3" --with-toolset="--cxx=${CXX_FOR_BUILD}"
 
 # Patch adapted from
 # https://svnweb.freebsd.org/ports/head/devel/boost-libs/files/patch-boost_math_tools_config.hpp?revision=439932&view=markup
