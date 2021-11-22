@@ -61,7 +61,7 @@ elif [[ $target == *freebsd* ]]; then
     extraargs="address-model=64 link=shared"
     echo "using clang : 6.0 : $CXX : <linkflags>\\"$LDFLAGS\\" ;" > project-config.jam
 fi
-./b2 -j${nproc} toolset=$toolset target-os=$targetos $extraargs variant=release --prefix=$prefix --layout=system install
+./b2 -j${nproc} toolset=$toolset target-os=$targetos $extraargs variant=release --prefix=$prefix --libdir=$libdir --layout=system install
 
 install_license LICENSE_1_0.txt
 """
